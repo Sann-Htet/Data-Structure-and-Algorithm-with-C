@@ -16,5 +16,7 @@ int main(){
 
 void pass_value(int a, int b){
     // printf("%d %d\n", a, b);
+    a++;
+    b++;
     int c = a + b;
 }
