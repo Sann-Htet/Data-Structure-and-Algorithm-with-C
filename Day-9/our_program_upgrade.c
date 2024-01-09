@@ -2,6 +2,9 @@
 #include "stdlib.h"
 
 // function declare
+int email_scanner(char to_check_email[30]);
+void email_valid_one(char to_valid_email[30]);
+void email_valid_two(char to_valid_email[30]);
 void copy_two_charArray(char first[30],char second[30]);
 void registration();
 void menu();
@@ -9,16 +12,15 @@ void login();
 void login_checking(char l_email[30],char l_pass[20]);
 int size_of_charArray(char arr[30]);
 int compare_two_char_array(char first[30],char second[30]);
+void my_privilege(int user_id);
 void user_info_change(int user_id);
-int email_scanner(char to_check_email[30]);
-void email_valid(char to_valid_email[30]);
 
 //Global Var
 
-int g_userCount=0;
+int g_userCount=0; // how many users
 int g_login_check=-1;
 
-int email_validation = -1; // to check email is valid or not
+int email_validation=-1; // to check email is valid or not
 
 // structure Declare
 
@@ -41,7 +43,20 @@ int main(){
 
 //    int flag = compare_two_char_array(first,second);
 //    printf("%d",flag);
-    menu();
+    //menu();
+
+    char email[30];
+    while (email_validation==-1){
+        printf("Enter your email :");
+        scanf(" %[^\n]",&email);
+        email_valid_two(email);
+        if(email_validation==-1){
+            printf("Email is not valid:\n");
+        } else{
+            printf("Email is valid");
+        }
+
+    }
 
     return 0;
 }
@@ -79,7 +94,8 @@ void login(){
 
     login_checking(l_email,l_password);
     if(g_login_check != -1){
-        printf("LoginSuccess!\nYour Id = %d", g_login_check);
+
+        printf("LoginSuccess!\n Your Id= %d",g_login_check);
         my_privilege(g_login_check);
     } else{
         printf("Login Failed!\n");
@@ -89,50 +105,53 @@ void login(){
 }
 
 void my_privilege(int user_id){
-    int m_option = 0;
-    printf("\nWelcome Sir: %s\n", data[user_id].user_name);
-    printf("Your Phone Number: %d\n", data[user_id].phone_number);
 
-    printf("What do you want to do!\n");
-    printf("Enter 0 to Complete Exit:\nEnter 1 to Menu:\nEnter 2 to edit user info:");
-    scanf("%d", &m_option);
+    int m_option=-1;
+    printf("Welcome Sir: %s\n",data[user_id].user_name);
+    printf("Your PhoneNumber: %d\n",data[user_id].phone_number);
 
+    printf("What you want to do!\n");
+    printf("Enter 0 To Complete Exist:\nEnter 1 to Menu:\nEnter 2 to change user info:");
+    scanf("%d",&m_option);
     if(m_option == 0){
         exit(1);
-    }else if(m_option == 1){
+    } else if(m_option==1){
         menu();
-    }else if(m_option == 2){
+    } else if(m_option==2){
         user_info_change(user_id);
-    }else {
+    }
+    else{
         printf("Wrong Option Number:\n");
         my_privilege(user_id);
     }
 
+
 }
 
 void user_info_change(int user_id){
-    int change_option = 0;
-    printf("Press 1: to change Name:\nPress 2: to change Email:\n");
-    printf("Press 3: to change Password:\nPress 2: to change Phone Number:\n");
-    printf("Press 5: to change Address:\nPress 2: to change PostalCode:\n");
-    printf("Press 7: For you privilege");
-    scanf("%d", &change_option);
+    int change_option=0;
+    printf("Press 1: To change Name:\nPress 2: To change Email:\n");
+    printf("Press 3: To change Password:\nPress 4: To change PhoneNumber:\n");
+    printf("Press 5: To change Address:\nPress 6: To change PostCode:\n");
+    printf("Press 7: For your privilege:");
+    scanf("%d",&change_option);
 
-    if(change_option == 1){
-        char new_user_name[30];
+    if(change_option==1){
+        char newuser_name[30];
         printf("To change name:\n");
-        printf("This is your user name: %s\n", data[user_id].user_name);
-        printf("Enter your new user name:\n");
-        scanf(" %[^\n]", &new_user_name);
-        copy_two_charArray(data[user_id].user_name, new_user_name);
-        printf("This is your new user name: %s\n", data[user_id].user_name);
+        printf("This is your user name: %s\n",data[user_id].user_name);
+        printf("Enter your new user name:");
+        scanf(" %[^\n]",&newuser_name);
+        copy_two_charArray(data[user_id].user_name,newuser_name);
+        printf("This is your new user name: %s",data[user_id].user_name);
 
-    }else if(change_option == 2){
-        printf("To change email: \n");
+
+    }else if(change_option==2){
+        printf("To change email:\n");
     }
 
-}
 
+}
 void login_checking(char l_email[30],char l_pass[20]){
     int i=0;
     g_login_check=-1;
@@ -159,22 +178,24 @@ void registration(){
     char r_userpassword[20];
     int r_phoneNumber=0;
     char r_address[50];
-    int r_postal_code = 0;
-
+    int r_postal_code=0;
     printf("This is Registration Option:\n");
     printf("Enter your user name to Register:");
     scanf(" %[^\n]",&r_username);
+    int email_exist=-1;
 
-    int email_exist = -1;
-    while(email_exist == -1){
+    while (email_exist==-1){
         printf("Enter your user email to Register:");
         scanf(" %[^\n]",&r_useremail);
-        email_exist = email_scanner(r_useremail);
-        if (email_exist == -1){
-            printf("Your email already registered! %s\n", r_useremail);
-            printf("Enter new email address!\n");
+        email_exist =email_scanner(r_useremail);
+        if(email_exist==-1){
+            printf("Your email already registered! %s\n",r_useremail);
+            printf("Enter your new email address!\n");
         }
+
     }
+
+
 
     printf("Enter your user password to Register:");
     scanf(" %[^\n]",&r_userpassword);
@@ -182,11 +203,9 @@ void registration(){
     scanf("%d",&r_phoneNumber);
 
     printf("Enter your Address to Register:");
-    scanf(" %[^\n]", &r_address);
-
-    printf("Enter you Postal code to Register:");
-    scanf("%d", &r_postal_code);
-
+    scanf(" %[^\n]",&r_address);
+    printf("Enter your Postal code to Register:");
+    scanf("%d",&r_postal_code);
 
     // collecting
     copy_two_charArray(data[g_userCount].user_name,r_username);
@@ -198,23 +217,24 @@ void registration(){
     copy_two_charArray(data[g_userCount].user_pass,r_userpassword);
     printf("\nChecking for Password: %s",data[g_userCount].user_pass);
 
+
     data[g_userCount].phone_number = r_phoneNumber;
     printf("\nChecking for PhoneNUmber: %d",data[g_userCount].phone_number);
 
-    copy_two_charArray(data[g_userCount].address, r_address);
-    printf("\nChecking for Address: %s", data[g_userCount].address);
+
+    copy_two_charArray(data[g_userCount].address,r_address);
+    printf("\nChecking for Address  %s",data[g_userCount].user_pass);
 
     data[g_userCount].postal_code = r_postal_code;
-    printf("\nChecking for Postal Code: %d", data[g_userCount].postal_code);
+    printf("\nChecking for postal_code: %d",data[g_userCount].postal_code);
 
     data[g_userCount].user_id = g_userCount;
-
     g_userCount++;
 
 }
 void copy_two_charArray(char first[30],char second[30]){
     for(int x=0; x<30; x++){
-        first[x] == '\0';
+        first[x]=='\0';
     }
     int i=0;
     for(i=0; i<30; i++){
@@ -231,22 +251,22 @@ void copy_two_charArray(char first[30],char second[30]){
 
 int compare_two_char_array(char first[30],char second[30]){
 
-   int size1= size_of_charArray(first);
-   int size2= size_of_charArray(second);
-   int sameCount=0;
-   if( size1 == size2){
-       for(int i=0; i<size1; i++){
+    int size1= size_of_charArray(first);
+    int size2= size_of_charArray(second);
+    int sameCount=0;
+    if( size1 == size2){
+        for(int i=0; i<size1; i++){
 
-           if(first[i]==second[i]){
-               sameCount++;
-           }
-       }
-   }
-   if(size1 == sameCount){
-       return 1;
-   } else{
-       return 0;
-   }
+            if(first[i]==second[i]){
+                sameCount++;
+            }
+        }
+    }
+    if(size1 == sameCount){
+        return 1;// if same
+    } else{
+        return 0; // if not same
+    }
 }
 
 int size_of_charArray(char arr[30]){
@@ -263,24 +283,128 @@ int size_of_charArray(char arr[30]){
 }
 
 int email_scanner(char to_check_email[30]){
-    int exit_or_not = -1;
-    if(g_userCount == 0){
+    int exit_or_not=-1;
+    if(g_userCount==0){
         return 1;
-    }else{
-        for(int i=0; i<g_userCount; i++){
-            // we got 1 if same, or 0
-            exit_or_not = compare_two_char_array(data[i].user_email, to_check_email);
-            if(exit_or_not == 1){
-                return -1; // already registered
+    } else{
+        for(int i=0; i<g_userCount ; i++){
+            // we got 1 if same , 0
+            exit_or_not=compare_two_char_array(data[i].user_email,to_check_email);
+            if(exit_or_not==1){
+                return -1; // already register
             }
         }
     }
-    return 1; // can go on
+
+    return 1;// you can register
+
 }
 
-void email_valid(char to_valid_email[30]){
+void email_valid_one(char to_valid_email[30]){
+
     // character handling
-    // sann@gmail.com (special char, space, -)
-    // @gmail.com, @yahoo.com, @outlook.com, @apple.com, @n1c.com
-    // only take number, small letter
+    // win!asm@n1c.com ( special , space , - ,
+    // @gmail.com , @yahoo.com , @outlook.com , @apple.com , @n1c.com
+    // number , small letter ယူမယ် ကျန်တာ အကုန် ဘန်း // num = 48-57 , small = 97-122
+    char first[30];
+    char second[30];
+    char one_char;
+    int xx=0;
+    int arr_size = size_of_charArray(to_valid_email);
+    for(int i=0; i<arr_size; i++){
+        one_char = to_valid_email[i];
+        if(one_char=='@'){
+            for(int a=i; a<arr_size; a++){
+                if(to_valid_email[a]=='\0'){
+                    break;
+                } else{
+                    second[xx]=to_valid_email[a];
+                    xx++;
+                }
+            }
+        } else{
+            if((one_char>=48 && one_char<=57)||(one_char>=97 &&one_char<=122)){
+
+                first[i]=one_char;
+            } else{
+                email_validation= -1;
+                break;
+            }
+        }
+    }
+
+}
+
+void email_valid_two(char to_valid_email[30]){
+    // number , small letter ယူမယ် ကျန်တာ အကုန် ဘန်း // num = 48-57 , small = 97-122
+    // to_valid_email[30] = {w,i,n,a,s,m,@,n,1,c,.,c,o,m};
+    int first_count=0;
+    char one_char;
+    char first_valid=0;
+   int arr_size =  size_of_charArray(to_valid_email);
+
+    for (int i = 0; i < arr_size; ++i) {
+        if(to_valid_email[i]=='@'){
+            break;
+        } else{
+            first_count++;
+        }
+    }
+    for(int x=0; x<first_count; x++){
+        one_char = to_valid_email[x];
+        if((one_char>=48 && one_char<=57)||(one_char>=97 &&one_char<=122)){
+            first_valid++;
+        } else{
+            first_valid=-1;
+        }
+    }
+
+    if(first_count!=first_valid || first_count==arr_size || first_count==0){
+        email_validation=-1;
+        return;
+    } else{
+        email_validation=1;
+        printf("\n\n [+]First Part checking complete!\n");
+    }
+
+    printf("Arr Size: %d\n",arr_size);
+    printf("first_count %d\n",first_count);
+    printf("First count index value %c\n",to_valid_email[first_count]);
+
+    // @gmail.com , @yahoo.com , @outlook.com , @apple.com , @n1c.com
+    char gmail[11]={'@','g','m','a','i','l','.','c','o','m'};
+    char yahoo[11]={'@','y','a','h','o','o','.','c','o','m'};
+    char outlook[12]={'@','o','u','t','l','o','o','k','.','c','o','m'};
+    char apple[11]={'@','a','p','p','l','e','.','c','o','m'};
+    char n1c[11]={'@','n','1','c','.','c','o','m'};
+    int second_count=0;
+    char arr_sec_part[13];
+    int for_sec_index=0;
+
+    second_count = arr_size-first_count;
+    printf("second count value : %d\n",second_count);
+    printf("Second Data :");
+    for(int xxx=first_count; xxx<arr_size; xxx++){
+        arr_sec_part[for_sec_index] = to_valid_email[xxx];
+        printf("%c",arr_sec_part[for_sec_index]);
+        for_sec_index++;
+
+    }
+    printf("\n");
+
+    int g = compare_two_char_array(arr_sec_part,gmail);
+    int y = compare_two_char_array(arr_sec_part,yahoo);
+    int o = compare_two_char_array(arr_sec_part,outlook);
+    int a = compare_two_char_array(arr_sec_part,apple);
+    int n = compare_two_char_array(arr_sec_part,n1c);
+
+    if(g||y||o||a||n){
+        email_validation=1;
+        printf("\n\n [+]Second Part checking complete!\n");
+
+    } else{
+        printf("Second email validatino failed!\n");
+        email_validation=-1;
+    }
+
 }
