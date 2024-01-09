@@ -11,11 +11,14 @@ int size_of_charArray(char arr[30]);
 int compare_two_char_array(char first[30],char second[30]);
 void user_info_change(int user_id);
 int email_scanner(char to_check_email[30]);
+void email_valid(char to_valid_email[30]);
 
 //Global Var
 
 int g_userCount=0;
 int g_login_check=-1;
+
+int email_validation = -1; // to check email is valid or not
 
 // structure Declare
 
@@ -161,7 +164,7 @@ void registration(){
     printf("This is Registration Option:\n");
     printf("Enter your user name to Register:");
     scanf(" %[^\n]",&r_username);
-    
+
     int email_exist = -1;
     while(email_exist == -1){
         printf("Enter your user email to Register:");
@@ -273,4 +276,11 @@ int email_scanner(char to_check_email[30]){
         }
     }
     return 1; // can go on
+}
+
+void email_valid(char to_valid_email[30]){
+    // character handling
+    // sann@gmail.com (special char, space, -)
+    // @gmail.com, @yahoo.com, @outlook.com, @apple.com, @n1c.com
+    // only take number, small letter
 }
