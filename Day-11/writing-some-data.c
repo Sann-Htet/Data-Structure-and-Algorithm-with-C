@@ -13,10 +13,11 @@ int main() {
         // for(int i=0; some_data[i]!='\n'; i++){
         //     fputc(some_data[i], fptr);
         // }
-        fprintf(fptr, "Hi");
+        fprintf(fptr, "Hi\n");
+        fputs("This is from fputs", fptr);
+        fclose(fptr);
+
     }
-
-    fclose(fptr);
-
+    
     return 0;
 }
